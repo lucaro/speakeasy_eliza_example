@@ -1,0 +1,42 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+    id 'java'
+    id 'org.openapi.generator' version '5.2.0'
+}
+
+group 'ch.lucaro.speakeasyexample'
+version '1.0'
+
+repositories {
+    mavenCentral()
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    api "com.squareup.moshi:moshi-kotlin:1.9.2"
+    api "com.squareup.moshi:moshi-adapters:1.9.2"
+    api "com.squareup.okhttp3:okhttp:4.2.2"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        kotlin {
+            srcDirs += "$projectDir/build/generated/src/main/kotlin"
+        }
+    }
+}
+
+openApiGenerate {
+    generatorName = "kotlin"
+    inputSpec = "$rootDir/client-specs.json".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "ch.ddis.speakeasy.client"
+}
