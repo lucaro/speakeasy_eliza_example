@@ -484,7 +484,7 @@
         }
       },
       "ChatRoomInfo" : {
-        "required" : [ "prompt", "remainingTime", "sessions", "uid" ],
+        "required" : [ "prompt", "remainingTime", "uid", "users" ],
         "type" : "object",
         "properties" : {
           "uid" : {
@@ -498,10 +498,10 @@
             "type" : "integer",
             "format" : "int64"
           },
-          "sessions" : {
+          "users" : {
             "type" : "array",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ChatRoomUserInfo"
             }
           },
           "prompt" : {
@@ -517,6 +517,21 @@
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/ChatRoomInfo"
+            }
+          }
+        }
+      },
+      "ChatRoomUserInfo" : {
+        "required" : [ "alias", "sessions" ],
+        "type" : "object",
+        "properties" : {
+          "alias" : {
+            "type" : "string"
+          },
+          "sessions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
             }
           }
         }

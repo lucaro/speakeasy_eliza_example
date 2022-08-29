@@ -63,9 +63,9 @@ object Main {
                             )
 
                             val lastMessage =
-                                state.messages.filter { it.session != sessionDetails.sessionId }.lastOrNull()
+                                state.messages.lastOrNull { it.session != sessionDetails.sessionId }
 
-                            if (lastMessage != null) {
+                                if (lastMessage != null) {
                                 lastMessageTime = lastMessage.timeStamp
                                 val reply = eliza.processInput(lastMessage.message)
                                 println("received message in room ${room.uid}")
