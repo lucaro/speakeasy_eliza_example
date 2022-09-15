@@ -360,7 +360,7 @@
     "/api/alias/{roomId}" : {
       "get" : {
         "tags" : [ "Chat" ],
-        "summary" : "Get alias of the other user in the chatroom",
+        "summary" : "Get alias of a user in a chat room",
         "operationId" : "getApiAliasWithRoomid",
         "parameters" : [ {
           "name" : "roomId",
@@ -382,9 +382,9 @@
           "200" : {
             "description" : "OK",
             "content" : {
-              "application/json" : {
+              "text/plain" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Aliases"
+                  "type" : "string"
                 }
               }
             }
@@ -444,7 +444,7 @@
         }
       },
       "UserSessionDetails" : {
-        "required" : [ "sessionId", "sessionToken", "startTime", "userDetails", "userSessionAlias" ],
+        "required" : [ "sessionId", "sessionToken", "startTime", "userDetails" ],
         "type" : "object",
         "properties" : {
           "userDetails" : {
@@ -459,9 +459,6 @@
           "startTime" : {
             "type" : "integer",
             "format" : "int64"
-          },
-          "userSessionAlias" : {
-            "type" : "string"
           }
         }
       },
@@ -484,7 +481,7 @@
         }
       },
       "ChatRoomInfo" : {
-        "required" : [ "prompt", "remainingTime", "uid", "users" ],
+        "required" : [ "prompt", "remainingTime", "uid", "userAliases" ],
         "type" : "object",
         "properties" : {
           "uid" : {
@@ -498,11 +495,14 @@
             "type" : "integer",
             "format" : "int64"
           },
-          "users" : {
+          "userAliases" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/ChatRoomUserInfo"
+              "type" : "string"
             }
+          },
+          "alias" : {
+            "type" : "string"
           },
           "prompt" : {
             "type" : "string"
@@ -521,23 +521,8 @@
           }
         }
       },
-      "ChatRoomUserInfo" : {
-        "required" : [ "alias", "sessions" ],
-        "type" : "object",
-        "properties" : {
-          "alias" : {
-            "type" : "string"
-          },
-          "sessions" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
       "ChatMessageReaction" : {
-        "required" : [ "messageOrdinal", "type" ],
+        "required" : [ "class", "messageOrdinal", "type" ],
         "type" : "object",
         "properties" : {
           "messageOrdinal" : {
@@ -547,7 +532,13 @@
           "type" : {
             "type" : "string",
             "enum" : [ "THUMBS_UP", "THUMBS_DOWN", "STAR" ]
+          },
+          "class" : {
+            "type" : "string"
           }
+        },
+        "discriminator" : {
+          "propertyName" : "class"
         }
       },
       "ChatRoomState" : {
@@ -572,14 +563,14 @@
         }
       },
       "RestChatMessage" : {
-        "required" : [ "message", "ordinal", "session", "timeStamp" ],
+        "required" : [ "authorAlias", "message", "ordinal", "timeStamp" ],
         "type" : "object",
         "properties" : {
           "timeStamp" : {
             "type" : "integer",
             "format" : "int64"
           },
-          "session" : {
+          "authorAlias" : {
             "type" : "string"
           },
           "ordinal" : {
@@ -588,30 +579,6 @@
           },
           "message" : {
             "type" : "string"
-          }
-        }
-      },
-      "AliasPair" : {
-        "required" : [ "alias", "session" ],
-        "type" : "object",
-        "properties" : {
-          "session" : {
-            "type" : "string"
-          },
-          "alias" : {
-            "type" : "string"
-          }
-        }
-      },
-      "Aliases" : {
-        "required" : [ "list" ],
-        "type" : "object",
-        "properties" : {
-          "list" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/AliasPair"
-            }
           }
         }
       }

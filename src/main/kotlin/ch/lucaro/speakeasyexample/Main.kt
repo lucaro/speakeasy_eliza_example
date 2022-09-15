@@ -4,12 +4,11 @@ import ch.ddis.speakeasy.client.ChatApi
 import ch.ddis.speakeasy.client.UserApi
 import codeanticode.eliza.Eliza
 import org.openapitools.client.infrastructure.ClientException
-import org.openapitools.client.models.ChatRoomInfo
 import org.openapitools.client.models.LoginRequest
 
 object Main {
 
-    val basePath = "https://speakeasy.ifi.uzh.ch"
+    private const val basePath = "https://speakeasy.ifi.uzh.ch"
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -40,13 +39,14 @@ object Main {
 
             rooms.forEach { room ->
                 if (room.uid !in knownRooms) {
-                    println("new chat room: ${room}")
+                    println("new chat room: $room")
 
                     knownRooms.add(room.uid)
 
                     Thread {
 
                         val roomId = room.uid
+                        val alias = room.alias!!
                         var active = true
                         var lastMessageTime = 0L
 
@@ -63,7 +63,7 @@ object Main {
                             )
 
                             val lastMessage =
-                                state.messages.lastOrNull { it.session != sessionDetails.sessionId }
+                                state.messages.lastOrNull { it.authorAlias != alias }
 
                                 if (lastMessage != null) {
                                 lastMessageTime = lastMessage.timeStamp
