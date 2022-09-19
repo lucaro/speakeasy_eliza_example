@@ -522,7 +522,7 @@
         }
       },
       "ChatMessageReaction" : {
-        "required" : [ "class", "messageOrdinal", "type" ],
+        "required" : [ "messageOrdinal", "type" ],
         "type" : "object",
         "properties" : {
           "messageOrdinal" : {
@@ -532,13 +532,7 @@
           "type" : {
             "type" : "string",
             "enum" : [ "THUMBS_UP", "THUMBS_DOWN", "STAR" ]
-          },
-          "class" : {
-            "type" : "string"
           }
-        },
-        "discriminator" : {
-          "propertyName" : "class"
         }
       },
       "ChatRoomState" : {
